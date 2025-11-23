@@ -42,6 +42,7 @@ void RegisterServices(WebApplicationBuilder appBuilder)
     appBuilder.Services.AddScoped<IPhotoMetaData, SqlPhotoMetaData>();
     appBuilder.Services.AddScoped<IFileStorage, LocalFileStorage>();
     appBuilder.Services.AddScoped<LoginAttribute>();
+    appBuilder.Services.AddSingleton<IFileOperations, DefaultFileOperations>();
 }
 
 void ApplyStandardUseStatements(WebApplication theApp)

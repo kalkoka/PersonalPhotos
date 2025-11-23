@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using PersonalPhotos.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace PersonalPhotos.Controllers;
 
@@ -9,7 +10,7 @@ public class LoginsController(ILogins loginService)
 {
     public IActionResult Index(string? returnUrl)
     {
-        var model = new LoginViewModel { ReturnUrl = returnUrl ?? "" , Email="", Password="" };
+        var model = new LoginViewModel { ReturnUrl = returnUrl ?? "", Email = "", Password = "" };
         return View("Login", model);
     }
 
@@ -33,7 +34,9 @@ public class LoginsController(ILogins loginService)
             ModelState.AddModelError("", "Invalid password");
             return View("Login", model);
         }
-        
+
+        // SUCCESS: persist login state in session so LoginAttribute recognizes the user
+        HttpContext.Session.SetString("User", model.Email);
 
         if (!string.IsNullOrEmpty(model.ReturnUrl))
             return Redirect(model.ReturnUrl);
